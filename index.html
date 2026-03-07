@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drone Profissional 4K</title><style>
+
+body{
+font-family:Arial;
+background:#F5F5F5;
+margin:0;
+}
+
+.topbar{
+background:#FFE600;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+}
+
+.gallery{
+flex:1;
+background:#fff;
+padding:20px;
+border-radius:8px;
+}
+
+.main-img{
+width:100%;
+border-radius:8px;
+margin-bottom:15px;
+}
+
+.thumbs{
+display:flex;
+gap:10px;
+}
+
+.thumbs img{
+width:23%;
+cursor:pointer;
+border-radius:6px;
+}
+
+.product{
+flex:1;
+background:#fff;
+padding:25px;
+border-radius:8px;
+}
+
+.title{
+font-size:26px;
+margin-bottom:10px;
+}
+
+.rating{
+color:#3483FA;
+margin-bottom:10px;
+}
+
+.viewing{
+color:#ff4d4d;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+.price{
+font-size:32px;
+margin-bottom:20px;
+}
+
+.buy{
+background:#3483FA;
+color:white;
+padding:15px;
+border:none;
+border-radius:6px;
+font-size:18px;
+width:100%;
+cursor:pointer;
+}
+
+.shipping{
+margin-top:20px;
+border-top:1px solid #ddd;
+padding-top:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+margin-bottom:10px;
+}
+
+.calc{
+background:#3483FA;
+color:white;
+border:none;
+padding:10px;
+border-radius:6px;
+width:100%;
+cursor:pointer;
+}
+
+#loading{
+height:6px;
+background:#ddd;
+border-radius:4px;
+overflow:hidden;
+margin-top:10px;
+display:none;
+}
+
+#loadingBar{
+height:6px;
+width:0%;
+background:#FFE600;
+transition:width 1s;
+}
+
+#resultado{
+display:none;
+margin-top:10px;
+padding:10px;
+border:1px solid #ddd;
+border-radius:6px;
+white-space:pre-line;
+}
+
+</style></head><body><div class="topbar">
+Mercado Livre
+</div><div class="container"><div class="gallery"><img id="mainPhoto" class="main-img" src="https://images.unsplash.com/photo-1508614589041-895b88991e3e"><div class="thumbs">
+<img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e" onclick="trocar(this.src)">
+<img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f" onclick="trocar(this.src)">
+<img src="https://images.unsplash.com/photo-1506947411487-a56738267384" onclick="trocar(this.src)">
+<img src="https://images.unsplash.com/photo-1527979809431-37e8f19e4ed1" onclick="trocar(this.src)">
+</div></div><div class="product"><div class="title">Drone Profissional 4K</div><div class="rating">⭐⭐⭐⭐⭐ (134 avaliações)</div><div class="viewing" id="viewingNow">
+🔥 15 pessoas vendo este produto agora
+</div><div class="price">R$ 1.899</div><button class="buy" onclick="irPagamento()">
+Comprar agora
+</button><div class="shipping"><h3>Calcular Frete</h3><input type="text" id="cepDestino" placeholder="Digite seu CEP"><button class="calc" onclick="calcularFrete()">
+Calcular Frete
+</button><div id="loading"><div id="loadingBar"></div></div><div id="resultado"></div></div></div></div><script>
+
+function trocar(src){
+document.getElementById("mainPhoto").src=src;
+}
+
+function irPagamento(){
+window.location.href="pagamento.html";
+}
+
+function animarBarra(){
+var bar=document.getElementById("loadingBar");
+bar.style.width="0%";
+setTimeout(function(){bar.style.width="100%";},50);
+}
+
+async function buscarEndereco(cep){
+
+try{
+const resp=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+const data=await resp.json();
+
+if(data.erro) return null;
+
+return data;
+
+}catch{
+return null;
+}
+
+}
+
+async function calcularFrete(){
+
+var cep=document.getElementById("cepDestino").value;
+
+cep=cep.replace(/\D/g,'');
+
+if(cep.length!=8){
+alert("Digite um CEP válido");
+return;
+}
+
+document.getElementById("loading").style.display="block";
+animarBarra();
+
+setTimeout(async function(){
+
+var destino=await buscarEndereco(cep);
+
+document.getElementById("loading").style.display="none";
+
+if(!destino){
+alert("CEP não encontrado");
+return;
+}
+
+var texto=
+"Destino: "+destino.localidade+" - "+destino.uf+
+"\n🚚 Frete GRÁTIS"+
+"\nChega em até 3 dias úteis";
+
+var res=document.getElementById("resultado");
+
+res.innerText=texto;
+res.style.display="block";
+
+},1200);
+
+}
+
+function atualizarVisualizando(){
+
+var numero=Math.floor(Math.random()*8)+12;
+
+document.getElementById("viewingNow").innerText=
+"🔥 "+numero+" pessoas vendo este produto agora";
+
+}
+
+setInterval(atualizarVisualizando,5000);
+
+</script></body>
+</html>
