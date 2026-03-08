@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#F5F5F5;
+margin:0;
+}
+
+.topbar{
+background:#FFE600;
+padding:15px;
+font-weight:bold;
+font-size:22px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.box{
+background:#fff;
+padding:25px;
+border-radius:8px;
+flex:1;
+}
+
+.summary img{
+width:100px;
+border-radius:6px;
+}
+
+.price{
+font-size:26px;
+margin-top:10px;
+}
+
+.qr{
+width:220px;
+margin:20px 0;
+}
+
+.pay{
+background:#3483FA;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
+}
+
+.secure{
+color:green;
+margin-top:10px;
+font-size:14px;
+}
+
+.timer{
+font-size:18px;
+color:red;
+margin-top:10px;
+font-weight:bold;
+}
+
+.status{
+margin-top:15px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+Checkout
+</div>
+
+<div class="container">
+
+<div class="box summary">
+
+<h3>Resumo da compra</h3>
+
+<img src="img6.JPG">
+
+<p>Drone Profissional 4K</p>
+
+<div class="price">R$ 1.000</div>
+
+<p>Frete calculado na página anterior</p>
+
+</div>
+
+<div class="box">
+
+<h3>Pagar com Pix</h3>
+
+<p>Escaneie o QR Code</p>
+
+<img class="qr"
+src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=pagamentodronemercadolivre@gmail.com">
+
+<p>Ou copie a chave Pix</p>
+
+<strong id="pix">
+pagamentodronemercadolivre@gmail.com
+</strong>
+
+<br><br>
+
+<button class="pay" onclick="copiarPix()">
+Copiar chave Pix
+</button>
+
+<br><br>
+
+<button class="pay" onclick="confirmarPagamento()">
+Já paguei
+</button>
+
+<div class="timer">
+Tempo restante: <span id="tempo">04:00</span>
+</div>
+
+<div class="status" id="status">
+Aguardando pagamento...
+</div>
+
+<div class="secure">
+🔒 Pagamento seguro<br>
+⏱ Reserva do produto por 5 minutos
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function copiarPix(){
+
+var chave = document.getElementById("pix").innerText;
+
+navigator.clipboard.writeText(chave).then(function(){
+
+alert("Chave Pix copiada!");
+
+});
+
+}
+
+
+// contador
+
+var tempo = 250;
+
+var contador = setInterval(function(){
+
+tempo--;
+
+var minutos = Math.floor(tempo / 60);
+var segundos = tempo % 60;
+
+if(segundos < 10){
+segundos = "0" + segundos;
+}
+
+document.getElementById("tempo").innerText =
+minutos + ":" + segundos;
+
+if(tempo <= 0){
+
+clearInterval(contador);
+
+document.getElementById("status").innerText =
+"Tempo expirado. Gere um novo pagamento.";
+
+}
+
+},1000);
+
+
+// simulação pagamento
+
+function confirmarPagamento(){
+
+document.getElementById("status").innerText =
+"Verificando pagamento...";
+
+setTimeout(function(){
+
+document.getElementById("status").innerText =
+"Após o Mercado Livre confirmar o pagamento, enviaremos o código de rastreio ✅";
+
+},4000);
+
+}
+
+</script>
+
+</body>
+</html>
