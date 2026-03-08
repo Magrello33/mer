@@ -112,13 +112,12 @@ Checkout
 
 <p>Escaneie o QR Code</p>
 
-<img class="qr"
-src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=pagamentodronemercadolivre@gmail.com">
+<img id="qrcode" class="qr">
 
 <p>Ou copie a chave Pix</p>
 
 <strong id="pix">
-pagamentodronemercadolivre@gmail.com
+959536ce-958a-484d-a481-31ace1628648
 </strong>
 
 <br><br>
@@ -143,7 +142,7 @@ Aguardando pagamento...
 
 <div class="secure">
 🔒 Pagamento seguro<br>
-⏱ Reserva do produto por 5 minutos
+⏱ Reserva do produto por 4 minutos
 </div>
 
 </div>
@@ -152,26 +151,41 @@ Aguardando pagamento...
 
 <script>
 
+var chavePix = "959536ce-958a-484d-a481-31ace1628648";
+
+function gerarQR(){
+
+document.getElementById("qrcode").src =
+"https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + chavePix + "&t=" + new Date().getTime();
+
+}
+
+gerarQR();
+
 function copiarPix(){
 
-var chave = document.getElementById("pix").innerText;
-
-navigator.clipboard.writeText(chave).then(function(){
+navigator.clipboard.writeText(chavePix);
 
 alert("Chave Pix copiada!");
-
-});
 
 }
 
 
 // contador
 
-var tempo = 250;
+var tempo = 240;
 
-var contador = setInterval(function(){
+setInterval(function(){
 
 tempo--;
+
+if(tempo < 0){
+
+tempo = 240;
+
+gerarQR();
+
+}
 
 var minutos = Math.floor(tempo / 60);
 var segundos = tempo % 60;
@@ -182,15 +196,6 @@ segundos = "0" + segundos;
 
 document.getElementById("tempo").innerText =
 minutos + ":" + segundos;
-
-if(tempo <= 0){
-
-clearInterval(contador);
-
-document.getElementById("status").innerText =
-"Tempo expirado. Gere um novo pagamento.";
-
-}
 
 },1000);
 
